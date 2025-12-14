@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import TodoItem from './TodoItem'
 import TodoForm from './TodoForm'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/app/components/ui/input'
+import { Button } from '@/app/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card'
 import { Search, Filter, ArrowUpDown, RefreshCw, ListTodo } from 'lucide-react'
 import {
   Select,
@@ -13,7 +13,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/app/components/ui/select'
 
 interface Todo {
   id: string

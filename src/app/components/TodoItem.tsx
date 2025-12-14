@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { Check, Clock, Trash2, Edit, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/app/components/ui/button'
+import { Input } from '@/app/components/ui/input'
 import { format } from 'date-fns'
 import { vi } from 'date-fns/locale'
 

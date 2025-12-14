@@ -1,7 +1,7 @@
 'use client'
 
 import { signOut, useSession } from 'next-auth/react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/app/components/ui/button'
 import { Bell, LogOut, User } from 'lucide-react'
 import Image from 'next/image'
 
