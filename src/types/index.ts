@@ -1,3 +1,5 @@
+import { ReactNode } from "react"
+
 export interface User {
   id: string
   name: string
@@ -6,6 +8,8 @@ export interface User {
 }
 
 export interface Todo {
+  priority: ReactNode
+  name: ReactNode
   id: string
   text: string
   deadline: string
@@ -34,3 +38,4 @@ declare module 'next-auth/jwt' {
     id: string
   }
 }
+

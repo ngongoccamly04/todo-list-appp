@@ -1,85 +1,123 @@
-'use client'
+// src/components/TodoForm.tsx
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/app/components/ui/button'
-import { Input } from '@/app/components/ui/input'
-import { Card, CardContent } from '@/app/components/ui/card'
-import { Plus, Calendar } from 'lucide-react'
-import { format } from 'date-fns'
-import { useSession } from 'next-auth/react'
+import { useState } from 'react';
 
-interface TodoFormProps {
-  onAdd: () => void
+// Định nghĩa interface Todo
+export interface TodoInput {
+  name: string;
+  deadline: string;
+  priority: 'High' | 'Medium' | 'Low';
+  status: 'Not started' | 'In progress' | 'Done';
 }
 
-export default function TodoForm({ onAdd }: TodoFormProps) {
-  const [text, setText] = useState('')
-  const [deadline, setDeadline] = useState(
-    format(new Date(Date.now() + 24 * 60 * 60 * 1000), "yyyy-MM-dd'T'HH:mm")
-  )
-  const [loading, setLoading] = useState(false)
-  const { data: session } = useSession()
+interface TodoFormProps {
+  onSubmit: (todo: {
+    name: string;
+    deadline: string;
+    priority: 'High' | 'Medium' | 'Low';
+    status: 'Not started' | 'In progress' | 'Done';
+  }) => void;
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!text.trim() || !session) return
+export default function TodoForm({ onSubmit }: TodoFormProps) {
+  const [name, setName] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [priority, setPriority] = useState<'High' | 'Medium' | 'Low'>('Medium');
+  const [status, setStatus] = useState<'Not started' | 'In progress' | 'Done'>('Not started');
 
-    setLoading(true)
-    try {
-      const response = await fetch('/api/todos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text,
-          deadline: new Date(deadline).toISOString(),
-        }),
-      })
-
-      if (response.ok) {
-        setText('')
-        onAdd()
-      }
-    } catch (error) {
-      console.error('Error adding todo:', error)
-    } finally {
-      setLoading(false)
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!name || !deadline) {
+      alert('Please fill in task name and deadline');
+      return;
     }
-  }
+
+    onSubmit({
+      name,
+      deadline,
+      priority,
+      status,
+    });
+
+    // Reset form
+    setName('');
+    setDeadline('');
+    setPriority('Medium');
+    setStatus('Not started');
+  };
 
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Input
-              placeholder="Nhập công việc mới..."
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              required
-            />
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 flex-1">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <Input
-                type="datetime-local"
-                value={deadline}
-                onChange={(e) => setDeadline(e.target.value)}
-                required
-                className="flex-1"
-              />
-            </div>
-            
-            <Button type="submit" disabled={loading}>
-              <Plus className="h-4 w-4 mr-2" />
-              {loading ? 'Đang thêm...' : 'Thêm mới'}
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
-  )
+    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+      <h4 className="font-semibold text-lg">Add New Task</h4>
+      
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Task Name
+        </label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Clean the flat..."
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Deadline
+        </label>
+        <input
+          type="date"
+          value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Priority
+          </label>
+          <select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value as typeof priority)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Status
+          </label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value as typeof status)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="Not started">Not started</option>
+            <option value="In progress">In progress</option>
+            <option value="Done">Done</option>
+          </select>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+      >
+        <i className="fa-solid fa-plus mr-2"></i>
+        Add Task
+      </button>
+    </form>
+  );
 }

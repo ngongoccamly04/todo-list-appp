@@ -74,3 +74,26 @@ module.exports = {
   },
   plugins: [require("tailwindcss-animate")],
 }
+
+// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        'php-bg': '#eef6fc',
+        'php-text': '#37352f',
+        'php-gray': '#787774',
+      },
+      fontFamily: {
+        'inter': ['Inter', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+}

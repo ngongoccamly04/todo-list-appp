@@ -7,32 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// MODEL TỐI GIẢN - CHỈ CẦN TẠO BẢNG USER TRƯỚC
 model User {
-  id        String   @id @default(cuid())
-  name      String
+  id        Int      @id @default(autoincrement())
   email     String   @unique
-  password  String?
-  image     String?
+  name      String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  todos     Todo[]
-}
-
-model Todo {
-  id           String   @id @default(cuid())
-  text         String
-  deadline     DateTime
-  status       Status   @default(pending)
-  finishedTime DateTime?
-  userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@index([userId])
-}
-
-enum Status {
-  pending
-  done
+  
+  @@map("User")  // QUAN TRỌNG: Đảm bảo tên bảng là "User"
 }
